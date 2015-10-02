@@ -1,0 +1,290 @@
+>>  Source Program statements with value of LC indicated 
+
+      .23456789012345678901                                             
+000000 COPY    START  0000                                            
+000000         EXTDEF BUFFER,BUFFEND,LENGTH                              
+000000         EXTREF RDREC,WRREC,X,Y                                 
+000000 FIRST   STL    RETADR                                          
+000003 CLOOP   +JSUB  X-Y                                             
+000007         LDA    LENGTH                                          
+00000A         COMP   #0                                              
+00000D         JEQ    ENDFIL                                          
+000010         +JSUB  WRREC                                           
+000014         J      CLOOP                                           
+000017 ENDFIL  LDA    =C'EOF'                                         
+00001A         STA    BUFFER                                          
+00001D         LDA    #3                                              
+000020         STA    LENGTH                                          
+000023         +JSUB  WRREC                                           
+000027         J      @RETADR                                         
+00002A RETADR  RESW   1                                               
+00002D LENGTH  RESW   1                                               
+000030         LTORG                                                  
+000030 *       =C'EOF'
+000033 BUFFER  RESB   4096                                            
+001033 BUFEND  EQU    *                                               
+001033 MAXLEN  EQU    BUFEND-BUFFER                                   
+      .                                                                 
+      .                                                                 
+      .                                                                 
+001033 RDREC   CSECT                                                  
+000000         EXTREF BUFFER,LENGTH,BUFEND                              
+000000         CLEAR  X                                               
+000002         CLEAR  A                                               
+000004         CLEAR  S                                               
+000006         LDT    MAXLEN                                          
+000009 RLOOP   TD     INPUT                                           
+00000C         JEQ    RLOOP                                           
+00000F         RD     INPUT                                           
+000012         COMPR  A,S                                             
+000014         JEQ    EXIT                                            
+000017         +STCH  BUFFER,X                                        
+00001B         TIXR   T                                               
+00001D         JLT    RLOOP                                           
+000020 EXIT    +STX   LENGTH                                          
+000024         RSUB                                                   
+000027 INPUT   BYTE   X'F1'                                           
+000028 MAXLEN  WORD   RLOOP-BUFFER                                    
+      .                                                                 
+      .                                                                 
+      .                                                                 
+00002B WRREC   CSECT                                                  
+000000         EXTREF LENGTH,BUFFER                                   
+000000         CLEAR  X                                               
+000002         +LDT   LENGTH                                          
+000006 WLOOP   TD     =X'05'                                          
+000009         JEQ    WLOOP                                           
+00000C         +LDCH  BUFFER,X                                        
+000010         WD     =X'05'                                          
+000013         TIXR   T                                               
+000015         JLT    WLOOP                                           
+000018         RSUB                                                   
+00001B         END    FIRST                                           
+00001B *       =X'05' 
+
+>>    e n d    o f   p a s s   1 
+
+>>   *****************************************************
+>>    s y m b o l     t a b l e (values in decimal) default Section
+
+        name         value     Absol/Reloc
+        ----------------------------------
+        BUFEND        4147     Relocatable 
+        BUFFER          51     Relocatable 
+        CLOOP            3     Relocatable 
+        COPY             0     Relocatable 
+        ENDFIL          23     Relocatable 
+        FIRST            0     Relocatable 
+        LENGTH          45     Relocatable 
+        MAXLEN        4096     Absolute 
+        RETADR          42     Relocatable 
+
+
+>>    s y m b o l     t a b l e (values in decimal) RDREC Section
+
+        name         value     Absol/Reloc
+        ----------------------------------
+        EXIT            32     Relocatable 
+        INPUT           39     Relocatable 
+        MAXLEN          40     Relocatable 
+        RDREC            0     Relocatable 
+        RLOOP            9     Relocatable 
+
+
+>>    s y m b o l     t a b l e (values in decimal) WRREC Section
+
+        name         value     Absol/Reloc
+        ----------------------------------
+        WLOOP            6     Relocatable 
+        WRREC            0     Relocatable 
+
+
+>>   *****************************************************
+>>   S t a r t   o f    P a s s   I I
+
+>>   A s s e m b l e d    p r o g r a m     l i s t i n g
+
+ LC    Code         Source Statement
+
+      >>  Source Program statements with value of LC indicated              
+                                                                        
+            .23456789012345678901                                             
+000000        COPY    START  0000                                            
+                                             
+
+000000                EXTDEF BUFFER,BUFFEND,LENGTH                             
+                                             
+
+000000                EXTREF RDREC,WRREC,X,Y                                 
+                                             
+
+000000 172027 FIRST   STL    RETADR                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000003        CLOOP   +JSUB  X-Y                                             
+object code : 4B100000                       ABS   n=1 i=1 x=0 b=0 p=0 e=1
+
+000007 032023         LDA    LENGTH                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00000A 290000         COMP   #0                                              
+                                             ABS   n=0 i=1 x=0 b=0 p=0 e=0
+
+00000D 332007         JEQ    ENDFIL                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000010                +JSUB  WRREC                                           
+object code : 4B100000                       ABS   n=1 i=1 x=0 b=0 p=0 e=1
+
+000014 3F2FEC         J      CLOOP                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000017 032016 ENDFIL  LDA    =C'EOF'                                         
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00001A 0F2016         STA    BUFFER                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00001D 010003         LDA    #3                                              
+                                             ABS   n=0 i=1 x=0 b=0 p=0 e=0
+
+000020 0F200A         STA    LENGTH                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000023                +JSUB  WRREC                                           
+object code : 4B100000                       ABS   n=1 i=1 x=0 b=0 p=0 e=1
+
+000027 3E2000         J      @RETADR                                         
+                                             RELOC n=1 i=0 x=0 b=0 p=1 e=0
+
+00002A        RETADR  RESW   1                                               
+                                             
+
+00002D        LENGTH  RESW   1                                               
+                                             
+
+000030                LTORG                                                  
+                                             
+
+000030 454F46 *       C'EOF' 
+                                             
+
+000033        BUFFER  RESB   4096                                            
+                                             
+
+001033        BUFEND  EQU    *                                               
+                                             
+
+001033        MAXLEN  EQU    BUFEND-BUFFER                                   
+                                             
+
+            .                                                                 
+            .                                                                 
+            .                                                                 
+001033        RDREC   CSECT                                                  
+                                             
+
+000000                EXTREF BUFFER,LENGTH,BUFEND                              
+                                             
+
+000000 B410           CLEAR  X                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000002 B400           CLEAR  A                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000004 B440           CLEAR  S                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000006 77201F         LDT    MAXLEN                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000009 E3201B RLOOP   TD     INPUT                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00000C 332FFA         JEQ    RLOOP                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00000F DB2015         RD     INPUT                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000012 A004           COMPR  A,S                                             
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000014 332009         JEQ    EXIT                                            
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000017                +STCH  BUFFER,X                                        
+object code : 57900000                       ABS   n=1 i=1 x=1 b=0 p=0 e=1
+
+00001B B850           TIXR   T                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00001D 3B2FE9         JLT    RLOOP                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000020        EXIT    +STX   LENGTH                                          
+object code : 13100000                       ABS   n=1 i=1 x=0 b=0 p=0 e=1
+
+000024 4F0000         RSUB                                                   
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000027 F1     INPUT   BYTE   X'F1'                                           
+                                             
+
+000028 000009 MAXLEN  WORD   RLOOP-BUFFER                                    
+                                             
+
+            .                                                                 
+            .                                                                 
+            .                                                                 
+00002B        WRREC   CSECT                                                  
+                                             
+
+000000                EXTREF LENGTH,BUFFER                                   
+                                             
+
+000000 B410           CLEAR  X                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000002                +LDT   LENGTH                                          
+object code : 77100000                       ABS   n=1 i=1 x=0 b=0 p=0 e=1
+
+000006 E32012 WLOOP   TD     =X'05'                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000009 332FFA         JEQ    WLOOP                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00000C                +LDCH  BUFFER,X                                        
+object code : 53900000                       ABS   n=1 i=1 x=1 b=0 p=0 e=1
+
+000010 DF2008         WD     =X'05'                                          
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000013 B850           TIXR   T                                               
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000015 3B2FEE         JLT    WLOOP                                           
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+000018 4F0000         RSUB                                                   
+                                             RELOC n=1 i=1 x=0 b=0 p=1 e=0
+
+00001B                END    FIRST                                           
+                                             
+
+00001B 05     *       X'05'  
+                                             
+
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
